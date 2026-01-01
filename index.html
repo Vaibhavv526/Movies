@@ -1,0 +1,286 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinemaMatch - AI Movie Recommendations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-film"></i>
+                <span>CinemaMatch</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#recommendations" class="nav-link"><i class="fas fa-magic"></i> Recommendations</a></li>
+                <li><a href="#explore" class="nav-link"><i class="fas fa-compass"></i> Explore</a></li>
+                <li><a href="#about" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-theme" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Discover Your Next Favorite Movie</h1>
+                <p class="hero-subtitle">AI-powered recommendations based on your favorite films. Just tell us what you love, and we'll find the perfect match.</p>
+                
+                <!-- Movie Search -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="movieInput" placeholder="Enter your favorite movie name...">
+                        <button id="searchBtn" class="btn-primary">
+                            <i class="fas fa-play"></i> Find Recommendations
+                        </button>
+                    </div>
+                    <div class="search-suggestions" id="searchSuggestions"></div>
+                </div>
+                
+                <!-- Quick Picks -->
+                <div class="quick-picks">
+                    <p class="quick-title">Try these popular ones:</p>
+                    <div class="quick-tags">
+                        <span class="quick-tag" data-movie="The Dark Knight">The Dark Knight</span>
+                        <span class="quick-tag" data-movie="Inception">Inception</span>
+                        <span class="quick-tag" data-movie="Pulp Fiction">Pulp Fiction</span>
+                        <span class="quick-tag" data-movie="The Godfather">The Godfather</span>
+                        <span class="quick-tag" data-movie="Parasite">Parasite</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-cards">
+                    <div class="card-floating card-1">
+                        <div class="card-poster">
+                            <div class="poster-image" style="background: linear-gradient(45deg, #ff6b6b, #ff8e53);"></div>
+                            <div class="card-rating">
+                                <i class="fas fa-star"></i> 8.9
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-floating card-2">
+                        <div class="card-poster">
+                            <div class="poster-image" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);"></div>
+                            <div class="card-rating">
+                                <i class="fas fa-star"></i> 8.7
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-floating card-3">
+                        <div class="card-poster">
+                            <div class="poster-image" style="background: linear-gradient(45deg, #9d50bb, #6e48aa);"></div>
+                            <div class="card-rating">
+                                <i class="fas fa-star"></i> 8.5
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section class="recommendations-section" id="recommendations">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Your Recommendations</h2>
+                <p class="section-subtitle">Movies you'll love based on your selection</p>
+            </div>
+            
+            <div class="results-container">
+                <!-- Selected Movie Card -->
+                <div class="selected-movie-card" id="selectedMovieCard" style="display: none;">
+                    <div class="selected-header">
+                        <h3>Based on:</h3>
+                        <div class="selected-movie">
+                            <div class="selected-poster"></div>
+                            <div class="selected-details">
+                                <h4 id="selectedMovieTitle"></h4>
+                                <div class="selected-genres" id="selectedMovieGenres"></div>
+                                <p class="selected-desc" id="selectedMovieDesc"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recommendations Grid -->
+                <div class="recommendations-grid" id="recommendationsGrid">
+                    <div class="placeholder-state">
+                        <div class="placeholder-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <h3>No Recommendations Yet</h3>
+                        <p>Enter a movie title above to get personalized recommendations</p>
+                    </div>
+                </div>
+                
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p>Analyzing movies and finding perfect matches...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore Section -->
+    <section class="explore-section" id="explore">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Explore By Genre</h2>
+                <p class="section-subtitle">Discover movies from different categories</p>
+            </div>
+            
+            <div class="genre-filters">
+                <div class="genre-tag active" data-genre="all">All</div>
+                <div class="genre-tag" data-genre="action">Action</div>
+                <div class="genre-tag" data-genre="drama">Drama</div>
+                <div class="genre-tag" data-genre="comedy">Comedy</div>
+                <div class="genre-tag" data-genre="sci-fi">Sci-Fi</div>
+                <div class="genre-tag" data-genre="thriller">Thriller</div>
+                <div class="genre-tag" data-genre="romance">Romance</div>
+                <div class="genre-tag" data-genre="horror">Horror</div>
+            </div>
+            
+            <div class="explore-grid" id="exploreGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">How It Works</h2>
+                    <p class="about-desc">Our AI analyzes thousands of movies based on genres, keywords, taglines, cast, and directors to find patterns and similarities that humans might miss.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4>AI-Powered</h4>
+                            <p>Uses TF-IDF vectorization and cosine similarity algorithms to find the closest matches</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h4>Large Database</h4>
+                            <p>Analyzes thousands of movies from our comprehensive database</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4>Smart Matching</h4>
+                            <p>Considers multiple factors including plot, cast, director, and themes</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <h4>Personalized</h4>
+                            <p>Gets better with more input - tell us what you love for better recommendations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <i class="fas fa-film"></i>
+                        <span>CinemaMatch</span>
+                    </a>
+                    <p class="footer-desc">AI-powered movie recommendations for cinephiles</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#recommendations">Recommendations</a></li>
+                        <li><a href="#explore">Explore</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Dataset</a></li>
+                        <li><a href="#">Research Paper</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CinemaMatch. All rights reserved. Movie data sourced from public datasets.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Movie Details Modal -->
+    <div class="modal" id="movieModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Movie Title</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-poster"></div>
+                <div class="modal-details">
+                    <div class="modal-meta">
+                        <span class="modal-rating"><i class="fas fa-star"></i> <span id="modalRating">8.5</span></span>
+                        <span class="modal-year" id="modalYear">2023</span>
+                        <span class="modal-duration" id="modalDuration">2h 30m</span>
+                    </div>
+                    <div class="modal-genres" id="modalGenres"></div>
+                    <p class="modal-description" id="modalDescription">Movie description will appear here...</p>
+                    <div class="modal-cast">
+                        <h4>Cast</h4>
+                        <p id="modalCast">Actor 1, Actor 2, Actor 3</p>
+                    </div>
+                    <div class="modal-director">
+                        <h4>Director</h4>
+                        <p id="modalDirector">Director Name</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
